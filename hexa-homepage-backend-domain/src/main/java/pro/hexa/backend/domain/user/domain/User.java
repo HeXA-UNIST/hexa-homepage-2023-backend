@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import pro.hexa.backend.domain.attachment.domain.Attachment;
 import pro.hexa.backend.domain.major.domain.Major;
@@ -107,4 +108,27 @@ public class User extends AbstractEntity {
     @Comment("참여 프로젝트 - 프로젝트 멤버 리스트")
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ProjectMember> projectMembers = new ArrayList<>();
+
+    public static User create(
+        String id,
+        String email,
+        GENDER_TYPE gender,
+        STATE_TYPE state,
+        Short regYear,
+        String regNum,
+        String name,
+        String password
+    ) {
+        User user = new User();
+        user.id = id;
+        user.email = email;
+        user.gender = gender;
+        user.state = state;
+        user.regYear = regYear;
+        user.regNum = regNum;
+        user.name = name;
+        user.password = password;
+        return user;
+
+    }
 }

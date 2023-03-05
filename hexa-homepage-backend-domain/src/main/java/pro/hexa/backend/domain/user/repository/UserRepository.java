@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import pro.hexa.backend.domain.user.domain.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
+public interface UserRepository extends JpaRepository<User, String>, UserRepositoryCustom {
 
 }
