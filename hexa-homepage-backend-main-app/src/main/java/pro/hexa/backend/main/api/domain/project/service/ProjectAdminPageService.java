@@ -1,9 +1,9 @@
 package pro.hexa.backend.main.api.domain.project.service;
 
-import io.netty.util.internal.StringUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -104,14 +104,28 @@ public class ProjectAdminPageService {
     }
 
     private void validateAdminCreateProjectRequest(AdminCreateProjectRequestDto adminCreateProjectRequestDto) {
-
-        if ((StringUtil.isNullOrEmpty(adminCreateProjectRequestDto.getTitle()))
-            || (adminCreateProjectRequestDto.getStartDate() == null)
-            || (adminCreateProjectRequestDto.getProjectTechStacks() == null)
-            || (adminCreateProjectRequestDto.getState() == null)
-        ) {
-            throw new BadRequestException(BadRequestType.NULL_VALUE);
+        if (Objects.equals(adminCreateProjectRequestDto.getTitle(), "")) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_TITLE);
         }
+        if (Objects.equals(adminCreateProjectRequestDto.getContent(), "")) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_CONTENT);
+        }
+        if (adminCreateProjectRequestDto.getProjectTechStacks() == null) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_PROJECTSTACKS);
+        }
+        if (adminCreateProjectRequestDto.getThumbnail() == null) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_THUMBNAIL);
+        }
+        if (adminCreateProjectRequestDto.getStartDate() == null) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_START_DATE);
+        }
+        if (adminCreateProjectRequestDto.getEndDate() == null) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_END_DATE);
+        }
+        if (Objects.equals(adminCreateProjectRequestDto.getState(), "")) {
+            throw new BadRequestException(BadRequestType.INVALID_CREATE_DTO_STATE);
+        }
+
     }
 
 
