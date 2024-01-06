@@ -1,6 +1,8 @@
 package pro.hexa.backend.main.api.domain.seminar.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class SeminarPageController {
         @RequestParam(required = false, defaultValue = "") String searchText,
         @RequestParam(required = false) Integer year,
         @RequestParam(required = false) Integer pageNum,
-        @RequestParam(required = false) Integer page
+        @RequestParam(required = false) @Valid @Min(value = 1) Integer page
     ) {
         return new ResponseEntity<>(SeminarPageService.getSeminarListResponse(searchText, year, pageNum, page), HttpStatus.OK);
     }

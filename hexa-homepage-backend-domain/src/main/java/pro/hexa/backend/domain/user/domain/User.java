@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,18 +16,18 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Comment;
+import pro.hexa.backend.config.StringCryptoConverter;
 import pro.hexa.backend.domain.attachment.domain.Attachment;
 import pro.hexa.backend.domain.major.domain.Major;
 import pro.hexa.backend.domain.model.model.AbstractEntity;
+import pro.hexa.backend.domain.project_member.domain.ProjectMember;
 import pro.hexa.backend.domain.sns.domain.SNS;
 import pro.hexa.backend.domain.tech_stack.domain.TechStack;
 import pro.hexa.backend.domain.user.model.AUTHORIZATION_TYPE;
 import pro.hexa.backend.domain.user.model.GENDER_TYPE;
 import pro.hexa.backend.domain.user.model.POSITION_TYPE;
 import pro.hexa.backend.domain.user.model.STATE_TYPE;
-import pro.hexa.backend.domain.project_member.domain.ProjectMember;
 
 @Entity(name = "user")
 @Getter
@@ -39,6 +40,7 @@ public class User extends AbstractEntity {
 
     @Comment("비밀번호")
     @Column(length = 127)
+    @Convert(converter = StringCryptoConverter.class)
     private String password;
 
     @Comment("이름")
@@ -109,10 +111,6 @@ public class User extends AbstractEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ProjectMember> projectMembers = new ArrayList<>();
 
-    @Comment("인증번호")
-    @Column(length = 6)
-    private String verificationCode;
-
     public static User create(
         String id,
         String email,
@@ -121,7 +119,8 @@ public class User extends AbstractEntity {
         Short regYear,
         String regNum,
         String name,
-        String password
+        String password,
+        AUTHORIZATION_TYPE authorizationType
     ) {
         User user = new User();
         user.id = id;
@@ -132,15 +131,23 @@ public class User extends AbstractEntity {
         user.regNum = regNum;
         user.name = name;
         user.password = password;
+        user.authorization = authorizationType;
         return user;
-
     }
 
-    public void setPassword(String newPassword) {
-        this.password=newPassword;
+    public static User createForTest(
+        String id,
+        String name,
+        Attachment profileImage
+    ) {
+        User user = new User();
+        user.id = id;
+        user.name = name;
+        user.profileImage = profileImage;
+        return user;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

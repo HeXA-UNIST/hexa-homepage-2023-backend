@@ -6,7 +6,8 @@ public enum AUTHORIZATION_TYPE implements EnumModel {
     Member("member"),
     Graduate("graduate"),
     Pro("pro"),
-    Admin("admin");
+    Admin("admin"),
+    All("all");
 
     private final String value;
 

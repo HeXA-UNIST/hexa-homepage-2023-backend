@@ -18,5 +18,4 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-hexa-page-jwt-secret-key: 1
-secretIv: 1
+hexa-page-jwt-secret-key: HexaH0mePageBack

@@ -1,8 +1,5 @@
 package pro.hexa.backend.main.api.domain.project.dto;
 
-import static pro.hexa.backend.main.api.common.utils.DateUtils.YYYY_MM_DD;
-import static pro.hexa.backend.main.api.common.utils.DateUtils.toFormat;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +9,9 @@ import pro.hexa.backend.domain.project.domain.Project;
 import pro.hexa.backend.domain.project.model.STATE_TYPE;
 import pro.hexa.backend.domain.project_member.model.AUTHORIZATION_TYPE;
 import pro.hexa.backend.domain.project_tech_stack.domain.ProjectTechStack;
+
+import static pro.hexa.backend.main.api.common.utils.DateUtils.YYYY_MM_DD;
+import static pro.hexa.backend.main.api.common.utils.DateUtils.toFormat;
 
 @Getter
 @NoArgsConstructor
@@ -32,7 +32,7 @@ public class ProjectDto {
     @Schema(description = "종료 날짜", defaultValue = "", example = "2022.01.01")
     protected String endDate;
 
-    @Schema(description = "기술스택리스트")
+    @Schema(description = "기술스택 리스트")
     protected List<String> techStackList;
 
     @Schema(description = "멤버 정보 리스트")

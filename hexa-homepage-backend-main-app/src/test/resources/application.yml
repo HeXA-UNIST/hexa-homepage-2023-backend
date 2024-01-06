@@ -1,0 +1,31 @@
+version: 0.0.1
+server:
+  port: 8080
+---
+spring:
+  config:
+    activate:
+      on-profile: default,development
+  redis:
+    host: localhost
+    port: 6379
+    password: "ta,TvT5P]ox<Ho0vs"
+    database: 0
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: hexa.admin@gmail.com
+    password: 1111111
+    default-encoding: UTF-8
+    smtp:
+      start-tls-enable: true
+      auth: true
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+hexa-page-jwt-secret-key: HexaH0mePageBack

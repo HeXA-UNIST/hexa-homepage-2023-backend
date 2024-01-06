@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pro.hexa.backend.domain.seminar.domain.Seminar;
 import pro.hexa.backend.domain.seminar.repository.SeminarRepository;
+import pro.hexa.backend.main.api.common.exception.BadRequestException;
+import pro.hexa.backend.main.api.common.exception.BadRequestType;
 import pro.hexa.backend.main.api.domain.seminar.dto.SeminarDto;
 import pro.hexa.backend.main.api.domain.seminar.dto.SeminarListResponse;
 
@@ -19,8 +21,12 @@ public class SeminarPageService {
 
     private final SeminarRepository seminarRepository;
 
-    public SeminarListResponse getSeminarListResponse(String searchText, Integer year, Integer pageNum, Integer page) {
-        List<Seminar> seminarList = seminarRepository.findAllByQuery(searchText, year, pageNum, page);
+    public SeminarListResponse getSeminarListResponse(String searchText, Integer year, Integer pageNum, Integer perPage) {
+        if (pageNum < 1) {
+            throw new BadRequestException(BadRequestType.INVALID_PAGE_NUM);
+        }
+
+        List<Seminar> seminarList = seminarRepository.findAllByQuery(searchText, year, pageNum, perPage);
         List<SeminarDto> seminars = seminarList.stream()
             .map(seminar -> {
                 SeminarDto seminarDto = new SeminarDto();
@@ -29,11 +35,11 @@ public class SeminarPageService {
             })
             .collect(Collectors.toList());
 
-        int maxPage = seminarRepository.getMaxPage(searchText, year, pageNum, page);
+        int maxPage = seminarRepository.getMaxPage(searchText, year, perPage);
 
         return SeminarListResponse.builder()
             .seminars(seminars)
-            .page(page)
+            .page(perPage)
             .maxPage(maxPage)
             .build();
     }

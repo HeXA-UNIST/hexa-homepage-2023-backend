@@ -7,4 +7,6 @@ import java.util.List;
 public interface ProjectTechStackRepositoryCustom {
 
     List<ProjectTechStack> findTechStackByQuery();
+
+    List<ProjectTechStack> getTechStackByContentList(List<String> content);
 }

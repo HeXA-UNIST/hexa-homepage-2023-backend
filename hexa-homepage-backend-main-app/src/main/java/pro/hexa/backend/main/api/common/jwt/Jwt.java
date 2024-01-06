@@ -21,12 +21,12 @@ public class Jwt {
 
     public static final int ACCESS_TOKEN_EXPIRE_MINUTE = 10;
     public static final int REFRESH_TOKEN_EXPIRE_DAY = 1;
+    public static final int CHANGE_PW_TOKEN_EXPIRE_MINUTE = 30;
 
     private static final String BEARER_PREFIX = "Bearer ";
+    public static final String JWT_TOKEN_TYPE = "TOKEN_TYPE";
     public static final String JWT_USER_ID = "userId";
     public static final String JWT_ISSUED_AT = "issuedAt";
-
-
 
     @Value("${hexa-page-jwt-secret-key}")
     public void setJwtSecretKey(String jwtSecretKey) {
@@ -38,6 +38,7 @@ public class Jwt {
         return Jwts.builder()
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .setExpiration(expiration)
+            .claim(JWT_TOKEN_TYPE, JwtTokenType.ACCESS_TOKEN.getValue())
             .claim(JWT_USER_ID, userId)
             .claim(JWT_ISSUED_AT, new Date().getTime())
             .signWith(SignatureAlgorithm.HS256, Jwt.jwtSecretKey)
@@ -49,6 +50,19 @@ public class Jwt {
         return Jwts.builder()
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .setExpiration(expiration)
+            .claim(JWT_TOKEN_TYPE, JwtTokenType.REFRESH_TOKEN.getValue())
+            .claim(JWT_ISSUED_AT, new Date().getTime())
+            .signWith(SignatureAlgorithm.HS256, Jwt.jwtSecretKey)
+            .compact();
+    }
+
+    public static String generateChangePasswordToken(String userId) {
+        Timestamp expiration = Timestamp.valueOf(LocalDateTime.now().plusMinutes(CHANGE_PW_TOKEN_EXPIRE_MINUTE));
+        return Jwts.builder()
+            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+            .setExpiration(expiration)
+            .claim(JWT_TOKEN_TYPE, JwtTokenType.CHANGE_PW_TOKEN.getValue())
+            .claim(JWT_USER_ID, userId)
             .claim(JWT_ISSUED_AT, new Date().getTime())
             .signWith(SignatureAlgorithm.HS256, Jwt.jwtSecretKey)
             .compact();

@@ -5,7 +5,7 @@ import pro.hexa.backend.domain.model.model.EnumModel;
 public enum STATE_TYPE implements EnumModel {
     승인중("승인중"),
     모집중("모집중"),
-    모집완료("진행중"),
+    진행중("진행중"),
     진행완료("진행완료");
 
     private final String value;

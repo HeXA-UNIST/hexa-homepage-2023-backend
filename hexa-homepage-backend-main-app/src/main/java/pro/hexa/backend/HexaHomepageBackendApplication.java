@@ -11,4 +11,3 @@ public class HexaHomepageBackendApplication {
         SpringApplication.run(HexaHomepageBackendApplication.class, args);
     }
 }
-

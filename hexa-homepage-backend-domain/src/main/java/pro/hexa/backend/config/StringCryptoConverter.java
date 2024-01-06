@@ -10,20 +10,14 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 @Converter
-@Component
-@SuppressWarnings({"java:S3329"})
 public class StringCryptoConverter implements AttributeConverter<String, String> {
 
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
-    @Value("")
-    private byte[] secretKey;
-
-    @Value("#{new javax.crypto.spec.IvParameterSpec('${secretIv}'.getBytes())}")
-    private IvParameterSpec secretIv;
+    @Value("${hexa-page-jwt-secret-key}")
+    private String secretKey;
 
     @Override
     public String convertToDatabaseColumn(String attribute) {
@@ -31,12 +25,14 @@ public class StringCryptoConverter implements AttributeConverter<String, String>
             return null;
         }
 
-        Key key = new SecretKeySpec(secretKey, "AES");
+        Key key = new SecretKeySpec(secretKey.getBytes(), "AES");
+        IvParameterSpec secretIv = getSecretIv();
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key, secretIv);
+            byte[] encrypted = Base64.getEncoder().encode(cipher.doFinal(attribute.getBytes()));
 
-            return new String(Base64.getEncoder().encode(cipher.doFinal(attribute.getBytes())));
+            return new String(encrypted);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -48,10 +44,11 @@ public class StringCryptoConverter implements AttributeConverter<String, String>
             return null;
         }
 
-        Key key = new SecretKeySpec(secretKey, "AES");
+        Key key = new SecretKeySpec(secretKey.getBytes(), "AES");
+
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, key, secretIv);
+            cipher.init(Cipher.DECRYPT_MODE, key, getSecretIv());
 
             return decodeFromData(dbData, cipher);
         } catch (Exception e) {
@@ -66,5 +63,10 @@ public class StringCryptoConverter implements AttributeConverter<String, String>
         } catch (IllegalArgumentException e) {
             return dbData;
         }
+    }
+
+    private IvParameterSpec getSecretIv() {
+        byte[] iv = secretKey.substring(0,16).getBytes();
+        return new IvParameterSpec(iv);
     }
 }

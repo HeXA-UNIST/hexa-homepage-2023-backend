@@ -22,7 +22,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pro.hexa.backend.domain.user.repository.UserRepository;
 import pro.hexa.backend.main.api.common.auth.repository.RefreshTokenRedisRepository;
-import pro.hexa.backend.main.api.common.config.security.LoginAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,15 +31,15 @@ public class WebSecurityConfig {
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final AuthenticationConfiguration authenticationConfiguration;
     public static final String[] AUTHENTICATION_UNNECESSARY_REQUESTS={
 
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        AuthenticationManager authenticationManager = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
-        Filter loginAuthenticationFilter = loginAuthenticationFilter(authenticationManager);
-        Filter jwtAuthorizationFilter = jwtAuthorizationFilter(authenticationManager);
+        Filter loginAuthenticationFilter = loginAuthenticationFilter();
+        Filter jwtAuthorizationFilter = jwtAuthorizationFilter();
         http.cors().configurationSource(corsConfigurationSource()).and()
             .csrf().disable()
             .addFilterAt(loginAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -71,14 +70,13 @@ public class WebSecurityConfig {
         return source;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    private AuthenticationManager getAuthenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public LoginAuthenticationFilter loginAuthenticationFilter(AuthenticationManager authenticationManager){
-
+    public LoginAuthenticationFilter loginAuthenticationFilter() throws Exception {
+        AuthenticationManager authenticationManager = getAuthenticationManager();
         LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(objectMapper, userRepository,
             refreshTokenRedisRepository);
         loginAuthenticationFilter.setAuthenticationManager(authenticationManager);
@@ -86,7 +84,8 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(AuthenticationManager authenticationManager){
+    public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
+        AuthenticationManager authenticationManager = getAuthenticationManager();
         return new JwtAuthorizationFilter(authenticationManager, userRepository);
     }
 

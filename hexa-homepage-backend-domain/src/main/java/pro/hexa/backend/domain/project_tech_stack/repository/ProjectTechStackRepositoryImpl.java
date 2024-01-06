@@ -18,4 +18,12 @@ public class ProjectTechStackRepositoryImpl implements ProjectTechStackRepositor
         List<ProjectTechStack> techStackList = queryFactory.selectFrom(projectTechStack).fetch();
         return techStackList;
     }
+
+    @Override
+    public List<ProjectTechStack> getTechStackByContentList(List<String> content) {
+        QProjectTechStack projectTechStack = QProjectTechStack.projectTechStack;
+        return queryFactory.selectFrom(projectTechStack)
+            .where(projectTechStack.content.in(content))
+            .fetch();
+    }
 }

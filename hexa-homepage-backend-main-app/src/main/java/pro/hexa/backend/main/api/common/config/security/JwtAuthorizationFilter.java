@@ -23,6 +23,7 @@ import pro.hexa.backend.main.api.common.exception.AuthorizationExceptionType;
 import pro.hexa.backend.main.api.common.exception.BadRequestException;
 import pro.hexa.backend.main.api.common.exception.BadRequestType;
 import pro.hexa.backend.main.api.common.jwt.Jwt;
+import pro.hexa.backend.main.api.common.jwt.JwtTokenType;
 import pro.hexa.backend.main.api.common.utils.FilterUtils;
 
 @Slf4j
@@ -48,6 +49,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
         try {
             Claims claims = Jwt.validate(accessToken, Jwt.jwtSecretKey);
+            JwtTokenType jwtTokenType = JwtTokenType.valueOf((String) claims.get(Jwt.JWT_TOKEN_TYPE));
+            if (jwtTokenType != JwtTokenType.ACCESS_TOKEN) {
+                return;
+            }
+
             String userId = (String) claims.get(Jwt.JWT_USER_ID);
             if (userId == null) {
                 return;

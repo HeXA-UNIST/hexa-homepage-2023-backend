@@ -1,0 +1,11 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: hexa.unist.no.reply@gmail.com
+    password: zarbehcegbirkwzk
+    default-encoding: UTF-8
+    smtp:
+      start-tls-enable: true
+      auth: true

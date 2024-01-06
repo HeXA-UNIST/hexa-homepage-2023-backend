@@ -27,5 +27,21 @@ public class ProjectTechStack extends AbstractEntity {
     @Comment("프로젝트")
     @ManyToOne(fetch = FetchType.LAZY)
     private Project project;
+
+    public static ProjectTechStack create(
+        String content
+    ) {
+        ProjectTechStack projectTechStack = new ProjectTechStack();
+        projectTechStack.content = content;
+        return projectTechStack;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+
+        if (project != null && !project.getProjectTechStacks().contains(this)) {
+            project.addProjectTechStack(this);
+        }
+    }
 }
 
