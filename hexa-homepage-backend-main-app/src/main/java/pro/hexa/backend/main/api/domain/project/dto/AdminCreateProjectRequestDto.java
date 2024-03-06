@@ -29,4 +29,6 @@ public class AdminCreateProjectRequestDto {
 
     @Schema(description = "썸네일 이미지 파일 ID")
     private Long thumbnail;
+
+
 }
