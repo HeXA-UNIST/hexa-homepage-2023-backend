@@ -21,13 +21,13 @@ public abstract class AbstractActivity extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "abstract_activity_id")
-    private Long id;
+    protected Long id;
 
     @Comment(value = "제목")
     @Column(length = 300)
-    private String title;
+    protected String title;
 
     @Comment(value = "내용")
     @Column(length = 3000)
-    private String content;
+    protected String content;
 }
