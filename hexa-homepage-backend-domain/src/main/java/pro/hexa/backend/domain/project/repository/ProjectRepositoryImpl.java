@@ -35,7 +35,7 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
             .leftJoin(project.members, projectMember).fetchJoin()
             .where(whereQuery)
             .orderBy(sort.equals("asc") ? project.title.asc() : project.title.desc())
-            .offset((long) pageNum * perPage)
+            .offset(((long) pageNum-1) * perPage)
             .distinct()
             .limit(perPage)
             .fetch();

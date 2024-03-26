@@ -83,6 +83,7 @@ public class SeminarAdminPageService {
 
         List<Attachment> attachmentList = new ArrayList<>();
 
+
         if (adminCreateSeminarRequestDto.getAttachments() != null) {
             for (Long attachmentId : adminCreateSeminarRequestDto.getAttachments()) {
                 Attachment attachment = attachmentRepository.findById(attachmentId)
@@ -102,7 +103,9 @@ public class SeminarAdminPageService {
         Seminar seminar = Seminar.create(
                 seminarDate,
                 user,
-                attachmentList
+                attachmentList,
+                adminCreateSeminarRequestDto.getTitle(),
+                adminCreateSeminarRequestDto.getContent()
         );
 
         seminarRepository.save(seminar);
@@ -166,7 +169,9 @@ public class SeminarAdminPageService {
         seminar.update(
                 adminModifySeminarRequestDto.getDate(),
                 user,
-                attachmentList
+                attachmentList,
+                adminModifySeminarRequestDto.getTitle(),
+                adminModifySeminarRequestDto.getContent()
         );
     }
     private void validateAdminModifySeminarRequest(AdminModifySeminarRequestDto adminModifySeminarRequestDto) {

@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import pro.hexa.backend.domain.attachment.domain.QAttachment;
@@ -28,7 +27,7 @@ public class SeminarRepositoryImpl implements SeminarRepositoryCustom {
         return queryFactory.selectFrom(seminar)
             .leftJoin(seminar.attachments, attachment).fetchJoin()
             .where(whereQuery)
-            .offset((long) pageNum * perPage)
+            .offset((long) (pageNum - 1) * perPage)
             .limit(perPage)
             .fetch();
     }
@@ -69,9 +68,9 @@ public class SeminarRepositoryImpl implements SeminarRepositoryCustom {
         QAttachment attachment = QAttachment.attachment;
 
         Seminar result = queryFactory.selectFrom(seminar)
-                .leftJoin(seminar.attachments, attachment).fetchJoin()
-                .where(seminar.id.eq(id))
-                .fetchOne();
+            .leftJoin(seminar.attachments, attachment).fetchJoin()
+            .where(seminar.id.eq(id))
+            .fetchOne();
 
         return Optional.ofNullable(result);
     }
@@ -80,10 +79,10 @@ public class SeminarRepositoryImpl implements SeminarRepositoryCustom {
     public List<Seminar> findAllInAdminPage(Integer pageNum, Integer perPage) {
         QSeminar seminar = QSeminar.seminar;
         return queryFactory.selectFrom(seminar)
-                .orderBy(seminar.title.desc())
-                .offset((long) pageNum * perPage)
-                .limit(perPage)
-                .fetch();
+            .orderBy(seminar.title.desc())
+            .offset((long) pageNum * perPage)
+            .limit(perPage)
+            .fetch();
     }
 
     @Override
@@ -91,7 +90,7 @@ public class SeminarRepositoryImpl implements SeminarRepositoryCustom {
         QSeminar seminar = QSeminar.seminar;
 
         return Math.toIntExact(queryFactory.select(seminar.id.count().divide(perPage))
-                .from(seminar)
-                .fetchFirst());
+            .from(seminar)
+            .fetchFirst());
     }
 }

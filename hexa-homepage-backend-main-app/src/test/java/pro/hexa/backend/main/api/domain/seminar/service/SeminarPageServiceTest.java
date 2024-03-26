@@ -60,11 +60,12 @@ public class SeminarPageServiceTest {
         List<Seminar> seminars = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             User user = createUser(i);
-            Seminar seminar = Seminar.create(LocalDateTime.of(2023, 1, 1, 0, 0), user,new ArrayList<>());
+            Seminar seminar = Seminar.create(LocalDateTime.of(2023, 1, 1, 0, 0), user,new ArrayList<>(), "title1", "content1");
             seminars.add(seminar);
         }
         return seminars;
     }
+
 
     private User createUser(int index) {
         return User.create(

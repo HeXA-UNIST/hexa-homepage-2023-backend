@@ -36,10 +36,6 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-    @Spy
-    private PasswordEncoder passwordEncoder;
-    @Mock
-    private EmailService emailService;
 
     @InjectMocks
     private UserService userService;
@@ -67,7 +63,7 @@ class UserServiceTest {
         //given
         Optional<User> user = Optional.of(makeUserForTest());
         when(userRepository.findById("seonuk")).thenReturn(user);
-        when(userRepository.findById("invalid")).thenReturn(null);
+        when(userRepository.findById("invalid")).thenReturn(Optional.empty());
 
         UserFindPasswordRequestDto requestDto1 = new UserFindPasswordRequestDto("seonuk");
         UserFindPasswordRequestDto requestDto2 = new UserFindPasswordRequestDto("invalid");

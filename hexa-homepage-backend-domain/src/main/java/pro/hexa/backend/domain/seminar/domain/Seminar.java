@@ -41,23 +41,31 @@ public class Seminar extends AbstractActivity {
     public static Seminar create(
         LocalDateTime date,
         User user,
-        List<Attachment> attachments
+        List<Attachment> attachments,
+        String title,
+        String content
     ) {
         Seminar seminar = new Seminar();
         seminar.date = date;
         seminar.user = user;
         seminar.attachments = attachments;
+        seminar.title = title;
+        seminar.content = content;
         return seminar;
     }
 
     public void update(
             LocalDateTime date,
             User user,
-            List<Attachment> attachments
+            List<Attachment> attachments,
+            String title,
+            String content
     ) {
         this.date = date;
         this.user = user;
         this.attachments = attachments;
+        this.title = title;
+        this.content = content;
 
     }
 }

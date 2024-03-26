@@ -26,8 +26,8 @@ public class SeminarPageController {
         @RequestParam(required = false, defaultValue = "") String searchText,
         @RequestParam(required = false) Integer year,
         @RequestParam(required = false) Integer pageNum,
-        @RequestParam(required = false) @Valid @Min(value = 1) Integer page
+        @RequestParam(required = false) @Valid @Min(value = 1) Integer perPage
     ) {
-        return new ResponseEntity<>(SeminarPageService.getSeminarListResponse(searchText, year, pageNum, page), HttpStatus.OK);
+        return new ResponseEntity<>(SeminarPageService.getSeminarListResponse(searchText, year, pageNum, perPage), HttpStatus.OK);
     }
 }

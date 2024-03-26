@@ -2,6 +2,7 @@ package pro.hexa.backend.main.api.domain.login.controller;
 
 import io.jsonwebtoken.Claims;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,7 @@ class UserControllerTest {
     private VerificationRedisRepository verificationRedisRepository;
 
     @Test
+    @DisplayName("회원가입")
     void userSignup() {
         //given
         String userId = "testId";
@@ -75,6 +77,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("아이디 찾기(인증번호 전송)")
     void findUserIdSendVerificationCode() {
         //given
         String userId = "testId+01";
@@ -110,6 +113,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("아이디 찾기(인증번호 확인)")
     void idVerifyVerificationCode() {
         // given
         String userId = "testId+02";
@@ -153,6 +157,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("비밀번호 찾기(id 입력)")
     void findUserPasswordById() {
         // given
         String userId = "testId+03";
@@ -183,6 +188,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("비밀번호 찾기(인증번호 전송)")
     void findUserPasswordSendVerificationCode() {
         // given
         String userId = "testId+04";
@@ -219,6 +225,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("비밀번호 찾기(인증번호 확인)")
     void passwordVerifyVerificationCode() {
         // given
         String userId = "testId+05";
@@ -268,6 +275,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("비밀번호 찾기(비밀번호 변경)")
     void changingUserPassword() {
         // given
         String userId = "testId+06";

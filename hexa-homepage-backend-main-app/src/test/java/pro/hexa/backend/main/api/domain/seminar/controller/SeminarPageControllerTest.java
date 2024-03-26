@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Triple;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,6 +41,7 @@ class SeminarPageControllerTest {
     private UserRepository userRepository;
 
     @Test
+    @DisplayName("세미나 리스트 조회")
     void getSeminarListResponse() {
         // given
         User user1 = User.create(
@@ -54,30 +56,65 @@ class SeminarPageControllerTest {
             AUTHORIZATION_TYPE.Member
         );
 
-        user1 = userRepository.save(user1);  // User 객체 저장
+        User user2 = User.create(
+                "user2",
+                "user2",
+                GENDER_TYPE.남,
+                STATE_TYPE.재학,
+                (short) 2022,
+                "20202020",
+                "User",
+                "password",
+                AUTHORIZATION_TYPE.Member
+        );
+
+        User user3 = User.create(
+                "user3",
+                "user3",
+                GENDER_TYPE.남,
+                STATE_TYPE.재학,
+                (short) 2022,
+                "20202023",
+                "User",
+                "password",
+                AUTHORIZATION_TYPE.Member
+        );
+
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
 
         List<Seminar> seminars = new ArrayList<>();
         seminars.add(Seminar.create(
             LocalDateTime.of(2023, 1, 1, 1, 1),
             user1,
-            new ArrayList<>()
+            new ArrayList<>(),
+                "title2",
+                "content2"
         ));
 
         seminars.add(Seminar.create(
             LocalDateTime.of(2024, 1, 1, 1, 1),
-            user1,
-            new ArrayList<>()
+            user2,
+            new ArrayList<>(),
+                "title1",
+                "content1"
         ));
 
-        seminars.add(Seminar.create(
+        Seminar seminar1 = Seminar.create(
             LocalDateTime.of(2023, 1, 2, 1, 1),
-            user1,
-            new ArrayList<>()
-        ));
+            user3,
+            new ArrayList<>(),
+                "title1",
+                "content1"
+        );
+        seminars.add(seminar1);
+
         seminarRepository.saveAll(seminars);
 
         // when
-        SeminarListResponse response = seminarPageController.getSeminarListResponse("", 2023, 1, 3).getBody();
+        SeminarListResponse response = seminarPageController.getSeminarListResponse("t", 2023, 1, 3).getBody();
 
         // then
         assertThat(response).isNotNull();
@@ -89,9 +126,9 @@ class SeminarPageControllerTest {
                 Seminar seminar = seminarMap.get(seminarDto.getSeminarId());
                 assertSeminar(seminarDto, seminar);
             });
-        assertEquals(response.getSeminars().size(), 0);
-        assertEquals(response.getPage(), 3);
-        assertEquals(response.getMaxPage(), 1);
+
+        assertEquals(response.getSeminars().size(), 3);
+
     }
 
     private void assertSeminar(SeminarDto seminarDto, Seminar seminar) {

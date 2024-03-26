@@ -25,9 +25,9 @@ public abstract class AbstractActivity extends AbstractEntity {
 
     @Comment(value = "제목")
     @Column(length = 300)
-    private String title;
+    protected String title;
 
     @Comment(value = "내용")
     @Column(length = 3000)
-    private String content;
+    protected String content;
 }
